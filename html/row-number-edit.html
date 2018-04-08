@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="../lib/html5shiv.js"></script>
+    <script type="text/javascript" src="../lib/respond.min.js"></script>
+    <![endif]-->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="../lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <script type="text/javascript" src="../config.js"></script>
+    <script type="text/javascript">
+        conf.include_CSS('../'+conf.Chui);
+        conf.include_CSS('../'+conf.Ciconfont);
+        conf.include_CSS('../'+conf.Chuiad);
+        conf.include_CSS('../'+conf.Cskin);
+        conf.include_CSS('../'+conf.Cstyle);
+        conf.include_JS('../'+conf.Jquery);
+        conf.include_JS('../'+conf.Jhui)
+        conf.include_JS('../'+conf. Jlayer);
+        conf.include_JS('../'+conf.Jhuiad);
+        conf.include_JS('../'+conf.Jvalidate);
+        conf.include_JS('../'+conf.Jvalidatemethods);
+        conf.include_JS('../'+conf.Jmessageszh);
+        conf.include_JS('../'+conf.JdatePicker);
+        conf.include_JS('../'+conf.Jvue);
+        conf.include_JS('../'+conf.Jdata);
+    </script>
+</head>
+<body >
+<div class="HuiTab"  style="height: 350px;overflow:hidden">
+    <div>
+        <form id="app" style="width: 90%;margin-top: auto" class="form form-horizontal mt-50">
+            <div class="row cl">
+                <label class="form-label col-xs-4"><span class="c-red">*</span>窗口号：</label>
+                <div class="formControls col-xs-6">
+                    <input type="text" name="windowNum" v-model="queryData.windowNum" class="input-text" readonly>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4"><span class="c-red">*</span>窗口固定业务：</label>
+                <div class="formControls col-xs-6">
+                    <input type="text" v-model="queryData.dealCategory" name="dealCategory" class="input-text">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4">窗口临时业务：</label>
+                <div class="formControls col-xs-6">
+                    <input type="text" name="changeCategory" v-model="queryData.changeCategory" class="input-text" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4">临时业务触发人数最大值：</label>
+                <div class="formControls col-xs-6">
+                    <input type="text" name="maximum" v-model="queryData.maximum"  class="input-text" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4">临时业务触发人数最小值：</label>
+                <div class="formControls col-xs-6">
+                    <input type="text" name="minimum" v-model="queryData.minimum"  class="input-text" >
+                </div>
+            </div>
+            <div class=" cl mt-50">
+                <div class="col-xs-6  col-sm-offset-6">
+                    <input class="btn btn-primary radius" type="submit" value="提 交">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    var vum=new Vue({
+        el: "#app",
+        data: {
+            queryData: {},
+        },
+        mounted(){
+            this.showData();
+            this.postData();
+        },
+        methods: {
+            showData: function () {
+                var id= localStorage.windowNum
+                jQuery.ajax({
+                    type: 'Get',
+                    url: "/v1/windowMapping/"+id,
+                    success: function (data) {
+                        vum.queryData = data.data[0];
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+            },
+            postData:function(){
+                $('#app').validate({
+                    rules: {
+                        dealCategory: {
+                            required: true
+                        }
+                    },
+                    submitHandler:function(){
+                        var id= localStorage.windowNum
+                        jQuery.ajax({
+                            type: 'PUT',
+                            url: "/v1/windowMapping/"+id,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: JSON.stringify(vum.queryData),
+                            success: function (res) {
+                                if (res.needLogin == false && res.success == true) {
+                                    layer.msg("窗口业务信息修改成功！", {icon: 1, time: 3000},function(){
+                                        window.open('row-number-list.html','_parent','');
+                                        window.opener = window;
+                                        window.close();
+                                    } );
+                                }
+                                else {
+                                    layer.msg("账户信息已过期，请重新登录！", {icon: 2, time: 3000}, function () {
+                                        window.location.href = "login.html";
+                                    });
+                                }
+
+                            },
+                            error: function (err) {
+                                layer.msg(JSON.parse(err.responseText).message,{icon:2,time:3000});
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,302 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="../lib/html5shiv.js"></script>
+	<script type="text/javascript" src="../lib/respond.min.js"></script>
+	<![endif]-->
+	<!--[if IE 6]>
+	<script type="text/javascript" src="../lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+	<script type="text/javascript" src="../config.js"></script>
+	<script type="text/javascript">
+        conf.include_CSS('../'+conf.Chui);
+        conf.include_CSS('../'+conf.Ciconfont);
+        conf.include_CSS('../'+conf.Chuiad);
+        conf.include_CSS('../'+conf.Cskin);
+        conf.include_CSS('../'+conf.Cstyle);
+		conf.include_CSS('../'+conf.Ceditor);
+    	conf.include_CSS('../'+conf.Cfont);
+        conf.include_JS('../'+conf.Jquery);
+        conf.include_JS('../'+conf.Jhui)
+        conf.include_JS('../'+conf. Jlayer);
+        conf.include_JS('../'+conf.Jhuiad);
+        conf.include_JS('../'+conf.Jvalidate);
+        conf.include_JS('../'+conf.Jvalidatemethods);
+        conf.include_JS('../'+conf.Jmessageszh);
+    	conf.include_JS('../'+conf.Jeditor);
+        conf.include_JS('../'+conf.Jvue);
+        conf.include_JS('../'+conf.Jdata);
+	</script>
+	<style>
+		#file{
+			margin-left: -400px;
+		}
+		.imgbox{
+			float: left;
+			margin-top: 20px;
+			left: -15px;
+			position: relative;
+			width:800px;
+			height:400px;
+			border: 1px solid #ddd;
+			overflow: hidden;
+		}
+		.imgnum{
+			left: 0;
+			top: 0;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+		.imgnum input{
+			position: absolute;
+			width:100%;
+			height:100%;
+			opacity:0;
+			padding: 0;
+			margin-left: -130px;
+			float: left;
+		}
+		.imgnum .img1,.imgnum .img2 {
+			width:100%;
+			height:100%;
+		}
+		.imgnum .close{
+			left:760px;
+		}
+	</style>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 法院简介管理 <span class="c-gray en">&gt;</span> 法院信息 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+		<article class="page-container">
+			<form action="" method="post" class="form form-horizontal" id="form-introduction-list" enctype="multipart/form-data">
+				<div class="row cl">
+					<label class="form-label col-xs-1"><span class="c-red">*</span>本院名称：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="" placeholder="" id="courtName" name="courtName" v-model="queryData.courtName">
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-1"><span class="c-red">*</span>本院概述：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<textarea style="width: 100%;height: 10px;visibility: hidden" name="courtDesc">{{content}}</textarea>
+						<vue-html5-editor id="courtDesc" :content="content" :height="300" :show-module-name="showModuleName" @change="updateData" ref="editor"></vue-html5-editor>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-1">本院图片：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<div class="container">
+							<div>
+								<div class="imgbox">
+									<div class="imgnum">
+										<input type="file" id="file" title="点击修改图片" multiple="multiple" name="imageFile" style="border:1px solid #ddd"  onchange="uploader(this)"/>
+										<span class="close"></span>
+										<img src="../image/btn.png" class="img1" style="display: none"/>
+										<img class="img2" style='display: block' v-bind:src="'../image/'+queryData.courtIcon" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-1">本院视频：</label>
+					<div class="formControls col-xs-8 col-sm-9" id="1234">
+						<video class="videoBox" controls="controls" v-bind:src="'../image/'+queryData.courtVideo"></video>
+						<input type="button"  onclick="$('#1234').hide();$('#videoBox').show()" class="btn btn-success radius l" style="margin:380px 0 0 30px " value="修改视频">
+					</div>
+					<div class="formControls col-xs-8 col-sm-9" id="videoBox" style="display: none">
+						<input type="file" multiple="multiple" style="border:1px solid #ddd;float: left" name="videoFile" />
+
+					</div>
+				</div>
+				<div class="row cl" >
+					<label class="form-label col-xs-1" >本院领导：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<div class="cl pd-5 bg-1 bk-gray">
+					<span class="l">
+						<a class="btn btn-primary radius" onclick="layer_show('添加领导','leader-add.html','800','600',1)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加领导</a>
+					</span>
+						</div>
+						<div class="mt-20">
+							<table class="table table-border table-bordered table-bg table-hover table-sort">
+								<thead>
+								<tr class="text-c">
+									<th>领导姓名</th>
+									<th>领导照片</th>
+									<th>领导介绍</th>
+									<th>操作</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr class="text-c" v-for="todo in leaderData.data">
+									<td style="width:80px">{{todo.leaderName}}</td>
+									<td><img style="height:120px;width:150px" v-bind:src="'../image/'+todo.leaderPhoto" alt="" alt=""></td>
+									<td>{{todo.leaderDesc}}</td>
+									<td style="width: 120px">
+										<a class="ml-5 label label-success radius" @click="leaderEdit(todo.id)" href="javascript:;"><i class="Hui-iconfont">&#xe6df;</i>编辑</a>
+										<a class="ml-5 label label-danger radius" @click="delData(todo.id)" href="javascript:;"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row cl">
+					<div class="col-xs-11 mt-50">
+						<input class="btn btn-primary radius" type="submit" value="提 交">
+					</div>
+				</div>
+			</form>
+		</article>
+	</div>
+</div>
+
+</body>
+<script>
+    //富文本编译器
+    Vue.use(VueHtml5Editor, {
+        showModuleName: true,
+        image: {compress: false},
+        icons: {
+            text: "custom-icon text",
+            color: "custom-icon color",
+            font: "custom-icon font",
+            align: "custom-icon align",
+            list: "custom-icon list",
+            link: "custom-icon link",
+            unlink: "custom-icon unlink",
+            tabulation: "custom-icon table",
+            "horizontal-rule": "custom-icon hr",
+            eraser: "custom-icon eraser",
+            hr: "custom-icon hr",
+            undo: "custom-icon undo",
+            "full-screen": "custom-icon full-screen",
+            info: "custom-icon info ",
+        }
+    })
+    var vum=new Vue({
+        el: "#form-introduction-list",
+        data: {
+            queryData: {},
+            leaderData:{},
+            content: "",
+            showModuleName: false,
+        },
+        mounted(){
+            this.showData();
+            this.showLeader();
+            this.postData();
+        },
+        methods: {
+            postData: function () {
+                $('#form-introduction-list').validate({
+                    rules: {
+                        courtName: {
+                            required: true,
+                            minlength: 4,
+                            maxlength: 200
+                        },
+                        courtDesc: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        courtName: '本院名称不能为空！',
+                        courtDesc: '本院概述不能为空！'
+                    },
+                    submitHandler: function () {
+                        var form = new FormData(document.getElementById("form-introduction-list"));
+                        jQuery.ajax({
+                            type: 'POST',
+                            url: "/v1/courtDesc/update/1",
+                            processData:false,
+                            contentType:false,
+                            data: form,
+                            success: function (res) {
+                                console.log(vum.queryData)
+                                if (res.needLogin == false && res.success == true) {
+                                    layer.msg("法院信息修改成功！", {icon: 1, time: 3000}, function () {
+                                        window.location.href ="court-introduction-list.html"
+                                    })
+                                } else {
+                                    layer.msg("账户信息已过期，请重新登录！", {icon: 2, time: 3000}, function () {
+                                        window.open('../login.html','_parent','');
+                                    });
+
+                                }
+
+                            },
+                            error: function (err) {
+                                layer.msg(JSON.parse(err.responseText).message, {icon: 2, time: 3000});
+                            }
+                        })
+                    }
+                })
+            },
+            showData: function () {  //法院介绍回显
+                jQuery.ajax({
+                    type: 'Get',
+                    url: "/v1/courtDesc/1",
+                    success: function (data) {
+                        console.log(data)
+                        vum.queryData = data.data[0];
+                        vum.content= vum.queryData.courtDesc
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+            },
+            showLeader: function () {  //法院介绍回显
+                jQuery.ajax({
+                    type: 'Get',
+                    url: "/v1/courtLeader/list?pageSize=20",
+                    success: function (data) {
+                        console.log(data)
+                        vum.leaderData = data;
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+            },
+            delData:function (id) {
+                jQuery.ajax({
+                    type: 'DELETE',
+                    url: "/v1/courtLeader/"+id,
+                    success: function (data) {
+                        layer.msg("删除成功！", {icon: 1, time:1000},function () {
+                            vum.showLeader();
+                        });
+
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+            },
+            leaderEdit:function (id) {
+                localStorage["leaderId"]=id;
+                layer_show('添加图片','leader-edit.html','800','600')
+            },
+            updateData: function (data) {
+                // sync content to component
+                this.content = data
+            },
+        }
+    })
+</script>
+
+</html>

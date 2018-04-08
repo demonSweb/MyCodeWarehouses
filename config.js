@@ -1,0 +1,32 @@
+(function(){
+    //JS文件配置
+    window.conf={
+        include_JS:function(src){document.write('<script src="'+src+'"></script>')},
+        include_CSS:function(href){document.write('<link href="'+href+'" rel="stylesheet" />')},
+        Jhui:'static/h-ui/js/H-ui.js',
+        Jlayer:'lib/layer/2.4/layer.js',
+        Jquery:'lib/jquery/1.9.1/jquery.min.js',
+        Jhuiad:'static/h-ui.admin/js/H-ui.admin.js',
+        Jvue:'lib/vue.js',
+        Jdata:'static/h-ui.admin/js/data.js',
+        Jcont:'lib/jquery.contextmenu/jquery.contextmenu.r2.js',
+        Jvalidate:'lib/jquery.validation/1.14.0/jquery.validate.js',
+        Jvalidatemethods:'lib/jquery.validation/1.14.0/validate-methods.js',
+        Jmessageszh:'lib/jquery.validation/1.14.0/messages_zh.js',
+        JdatePicker:'lib/My97DatePicker/4.8/WdatePicker.js',
+        Jlaypage:'../lib/laypage/1.2/laypage.js',
+        Jwebuploader:'../lib/webuploader/0.1.5/webuploader.min.js',
+        Chui:'static/h-ui/css/H-ui.css',
+        Ciconfont:'lib/Hui-iconfont/1.0.8/iconfont.css',
+        Chuiad:'static/h-ui.admin/css/H-ui.admin.css',
+        Cskin:'static/h-ui.admin/skin/blue/skin.css',
+        Cstyle:'static/h-ui.admin/css/style.css',
+        Clogin:'static/h-ui.admin/css/H-ui.login.css',
+        Ceditor:'../lib/editor/editor.css',
+        Jeditor:'../lib/editor/vue-html5-editor.js',
+        Cfont:'https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css',
+        Cwebuploader:'../lib/webuploader/0.1.5/webuploader.css',
+        DataUrl:'http://localhost:8080',
+        Datasrc:'http://localhost:8081'
+    };
+})();
